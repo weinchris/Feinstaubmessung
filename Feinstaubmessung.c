@@ -51,7 +51,7 @@
 #include "libs/BME_280/BME_280_ih.h"
 // TODO Incude SDS011 here
 
-#include "SDCard/SDCard.h"
+#include "libs/Logger/Logger.h"
 
 /* system header files */
 #include <stdio.h>
@@ -89,7 +89,8 @@ uint32_t bme280_sampling_rate = 100;
 
 void init(void)
 {
-	bme_280_init();
+	//bme_280_init();
+	sdcard_init();
 }
 
 void retrieveSensorData(void)
@@ -118,7 +119,8 @@ void appInitSystem(void * CmdProcessorHandle, uint32_t param2)
     BCDS_UNUSED(param2);
     vTaskDelay(5000);
     init();
-    retrieveSensorData();
+    //retrieveSensorData();
+    sdcard_writeBuffer();
 
 }
 /**@} */
