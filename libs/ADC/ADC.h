@@ -41,14 +41,9 @@
 **/
 
 /* header definition ******************************************************** */
-#ifndef XDK110_XDKAPPLICATIONTEMPLATE_H_
-#define XDK110_XDKAPPLICATIONTEMPLATE_H_
 
 /* local interface declaration ********************************************** */
  /* Priorities */
-#define TASK_PRIO_MAIN_CMD_PROCESSOR                (UINT32_C(1))
-#define TASK_STACK_SIZE_MAIN_CMD_PROCESSOR          (UINT16_C(700))
-#define TASK_Q_LEN_MAIN_CMD_PROCESSOR                (UINT32_C(10))
 
 /* local type and macro definitions */
 
@@ -57,15 +52,7 @@
 /* local module global variable declarations */
 
 /* local inline function definitions */
-/**
- * @brief This is a template function where the user can write his custom application.
- *
- * @param[in] CmdProcessorHandle Handle of the main commandprocessor
- *
- * @param[in] param2  Currently not used will be used in future
- */
-void appInitSystem(void * CmdProcessorHandle, uint32_t param2);
 
-#endif /* XDK110_XDKAPPLICATIONTEMPLATE_H_ */
+
 
 /** ************************************************************************* */

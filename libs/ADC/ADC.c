@@ -39,7 +39,7 @@ xTimerHandle scanAdcTimerHandle;
 /**
  * @brief Timer Callback; Scans and prints out the ADC Channels' Values
  */
-static void scanAdc(xTimerHandle pxTimer)
+extern void scanAdc(xTimerHandle pxTimer)
 {
     /* Initialize the Variables */
     (void) (pxTimer);
@@ -63,7 +63,7 @@ static void scanAdc(xTimerHandle pxTimer)
  * @brief Configure the ADC to scan multiple channels;
  *        Initialize and Start a time to scan the ADC
  */
-static void scanAdcInit(void)
+extern void scanAdcInit(void)
 {
     /* Initialize Configuration ADC Structures */
     ADC_Init_TypeDef     adc0_init_conf     = ADC_INIT_DEFAULT;
@@ -91,23 +91,6 @@ static void scanAdcInit(void)
         TIMER_AUTORELOAD_ON, NULL, scanAdc);
 
     xTimerStart(scanAdcTimerHandle, TIMERBLOCKTIME);
-}
-
-/* global functions ********************************************************* */
-
-/**
- * @brief This is a template function where the user can write his custom application.
- *
- */
-void appInitSystem(void * CmdProcessorHandle, uint32_t param2)
-{
-	if (CmdProcessorHandle == NULL)
-	    {
-	        printf("Command processor handle is null \n\r");
-	        assert(false);
-	    }
-	BCDS_UNUSED(param2);
-    scanAdcInit();
 }
 
 /** ************************************************************************* */
