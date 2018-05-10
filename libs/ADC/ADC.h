@@ -52,7 +52,7 @@
 /* local module global variable declarations */
 
 /* local inline function definitions */
-
+extern void scanAdcInit(void);
 
 
 /** ************************************************************************* */
