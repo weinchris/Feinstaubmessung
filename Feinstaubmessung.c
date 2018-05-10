@@ -49,7 +49,7 @@
 /* module includes ********************************************************** */
 #include "libs/BME_280/BME_280_ch.h"
 #include "libs/BME_280/BME_280_ih.h"
-// TODO Incude SDS011 here
+#include "libs/SDS011/SDS.h"
 
 #include "libs/Logger/Logger.h"
 
@@ -75,6 +75,7 @@ uint32_t bme280_sampling_rate_timer_ticks;
 uint32_t bme280_sampling_rate_remaining_ticks = 1;
 uint32_t bme280_sampling_rate = 100;
 
+const char* csv_header = ";bme280_temp[mDeg];bme280_press[Pa];bme280_hum[rh];\n";
 /* inline functions ********************************************************* */
 
 /* local functions ********************************************************** */
@@ -117,10 +118,17 @@ void appInitSystem(void * CmdProcessorHandle, uint32_t param2)
         assert(false);
     }
     BCDS_UNUSED(param2);
-    vTaskDelay(5000);
-    init();
+    vTaskDelay(8000);
+    //init();
     //retrieveSensorData();
-    sdcard_writeBuffer();
+    //writeDataOnSD("write some datajdfjkfj \n\r");
+    //sdcard_deintit();
+
+    printf("UART before\n\r");
+    UARTInit();
+    UARTTask();
+
+
 
 }
 /**@} */
