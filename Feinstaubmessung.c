@@ -51,7 +51,6 @@
 #include "libs/BME_280/BME_280_ch.h"
 #include "libs/BME_280/BME_280_ih.h"
 #include "libs/SDS011/SDS.h"
-
 #include "libs/Logger/Logger.h"
 
 /* system header files */
@@ -72,44 +71,12 @@
 /* local variables ********************************************************** */
 
 /* global variables ********************************************************* */
-uint32_t bme280_sampling_rate_timer_ticks;
-uint32_t bme280_sampling_rate_remaining_ticks = 1;
-uint32_t bme280_sampling_rate = 100;
 
-const char* csv_header = ";bme280_temp[mDeg];bme280_press[Pa];bme280_hum[rh];\n";
 /* inline functions ********************************************************* */
 
 /* local functions ********************************************************** */
 
 /* global functions ********************************************************* */
-
-/**
- * @brief This is a template function where the user can write his custom application.
- *
- */
-
-
-void init(void)
-{
-	//bme_280_init();
-	sdcard_init();
-}
-
-void retrieveSensorData(void)
-{
-	bme280_sampling_rate_remaining_ticks--;
-		if (bme280_sampling_rate_remaining_ticks < 1)
-		{
-			bme280_sampling_rate_remaining_ticks = bme280_sampling_rate_timer_ticks;
-			bme280_getSensorValues(NULL);
-			printf("BME: ;%ld;%ld;%ld\r\n", bme280s.temperature, bme280s.pressure, bme280s.humidity);
-		}
-}
-
-void deinit(void)
-{
-    bme_280_deInit();
-}
 
 void appInitSystem(void * CmdProcessorHandle, uint32_t param2)
 {
@@ -120,20 +87,20 @@ void appInitSystem(void * CmdProcessorHandle, uint32_t param2)
     }
     BCDS_UNUSED(param2);
     vTaskDelay(8000);
-    //init();
-    //retrieveSensorData();
-    //writeDataOnSD("write some datajdfjkfj \n\r");
-    //sdcard_deintit();
 
-//    UARTInit();
-//    UARTTask();
-
+    bme_280_init();
+    sdcard_init();
+    UARTInit();
     multiplexerSwitchingInit();
-    multiplexerSwitchingTask();
-
     scanAdcInit();
+
+    bme280Task();
+    UARTTask();
+    multiplexerSwitchingTask();
     scanAdcTask();
 
+    vTaskDelay(20000);
+    loggerTask();
 
 
 }

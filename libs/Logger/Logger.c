@@ -14,6 +14,11 @@
 #include <FreeRTOS.h>
 #include <timers.h>
 
+#include "../ADC/ADC.h"
+#include "../BME_280/BME_280_ch.h"
+#include "../BME_280/BME_280_ih.h"
+#include "../SDS011/SDS.h"
+
 /* constant definitions ***************************************************** */
 /* constant definitions ***************************************************** */
 #define DEFAULT_LOGICAL_DRIVE   ""
@@ -37,15 +42,15 @@ void sdcard_init(void){
       fileSystemResult = f_mount(&FatFileSystemObject, DEFAULT_LOGICAL_DRIVE,
                                     FORCE_MOUNT);
       if (FR_OK != fileSystemResult){
-        printf("Mounting SD card failed \n\r");
+        printf("Mounting SD card failed; fileSystemResult: %i  \n\r", fileSystemResult);
       }
     }
   }
-  fileSystemResult = f_open(&fileObject, filename, FA_OPEN_ALWAYS | FA_WRITE);
 
 }
 
 void writeDataOnSD(const char* dataBuffer){
+
 	FRESULT fileSystemResult;
 	char ramBufferWrite[UINT16_C(512)]; // Temporay buffer for write file
 	uint16_t fileSize;
@@ -55,17 +60,55 @@ void writeDataOnSD(const char* dataBuffer){
 	for(uint32_t index = 0; index < fileSize; index++){
 		ramBufferWrite[index] = dataBuffer[index];
 	}
-	f_lseek(&fileObject, f_size(&fileObject));
-	fileSystemResult = f_write(&fileObject, ramBufferWrite, fileSize, &bytesWritten);
 
+	fileSystemResult = f_open(&fileObject, filename, FA_OPEN_ALWAYS | FA_WRITE);
+	if(fileSystemResult != FR_OK){
+	  	printf("Error: Cannot open file %s; fileSystemResult: %i \n\r", filename, fileSystemResult);
+	}
+	fileSystemResult = f_lseek(&fileObject, f_size(&fileObject));
+	if((fileSystemResult != FR_OK)){
+			printf("Error: Cannot move file pointer for file %s; fileSystemResult: %i \n\r", filename, fileSystemResult);
+		}
+
+	fileSystemResult = f_write(&fileObject, ramBufferWrite, fileSize, &bytesWritten);
 	if((fileSystemResult != FR_OK) || (fileSize != bytesWritten)){
 		printf("Error: Cannot write to file %s; fileSystemResult: %i \n\r", filename, fileSystemResult);
 	}
-	printf("Write on SD card \n\r");
+
+	fileSystemResult = f_close(&fileObject);
+	if(fileSystemResult != FR_OK){
+		  	printf("Error: Cannot close file %s; fileSystemResult: %i \n\r", filename, fileSystemResult);
+	}
 }
 
 extern void sdcard_deintit(void)
 {
 	FRESULT fileSystemResult;
 	fileSystemResult = f_close(&fileObject);
+}
+
+void writeLogs(void)
+{
+	char buffer[200];
+	printf("Temperature, Pressure, Humidity, PM10, PM25, MQ9, MQ135, Rain\n\r");
+	writeDataOnSD("Temperature, Pressure, Humidity, PM10, PM25, MQ9, MQ135, Rain\n");
+
+	for(;;){
+		vTaskDelay(10000);
+		sprintf(buffer ,"%i, %i, %i, %f, %f, %f, %f, %f\n",bme280s.temperature, bme280s.pressure, bme280s.humidity, value_pm10, value_pm25, value_mq9, value_mq135, value_rain);
+		printf("Buffer: %s\r", buffer);
+		writeDataOnSD(buffer);
+	}
+}
+
+void loggerTask(void)
+{
+	xTaskCreate(
+			writeLogs,                 // function that implements the task
+		    (const char * const) "writeLogs", // a name for the task
+			(( unsigned short ) 1024),       // depth of the task stack
+		    NULL,                           // parameters passed to the function
+		    2,               // task priority
+		    NULL                      // pointer to a task handle for late reference
+		  );
 }

@@ -41,6 +41,9 @@
 **/
 
 /* header definition ******************************************************** */
+#ifndef ADC_H_
+#define ADC_H_
+
 
 /* local interface declaration ********************************************** */
  /* Priorities */
@@ -70,5 +73,5 @@ double value_rain;
 /* local inline function definitions */
 
 
-
+#endif
 /** ************************************************************************* */

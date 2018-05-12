@@ -85,7 +85,8 @@
 extern void sdcard_init(void);
 extern void sdcard_deintit(void);
 
-void writeDataOnSD(const char* dataBuffer);
+//void writeDataOnSD(const char* dataBuffer);
+void loggerTask(void);
 
 
 #endif /* LOGGER_LOGGER_H_ */

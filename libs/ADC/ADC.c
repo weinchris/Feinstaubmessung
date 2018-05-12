@@ -70,7 +70,7 @@ void scanAdc(xTimerHandle pxTimer)
         	value_mq135 = value_in_volts;
         	break;
         case rain:
-        	value_mq135 = value_in_volts;
+        	value_rain = value_in_volts;
         	break;
         default:  // sensor_switching
         	break;
@@ -108,9 +108,9 @@ void scanAdcInit(void)
 
 }
 
+/* Setup and Start the timer to scan the ADC Channels */
 void scanAdcTask(void)
 {
-	 /* Setup and Start the timer to scan the ADC Channels */
 	    scanAdcTimerHandle = xTimerCreate(
 	        (const char *) "ADC read", ONESECONDDELAY,
 	        TIMER_AUTORELOAD_ON, NULL, scanAdc);
@@ -146,7 +146,7 @@ void multiplexerSwitch(void)
 {
 
 	for(;;){
-	vTaskDelay (5000);
+	vTaskDelay (4000);
 
 	 switch(current_sensor) {
 	 	case mq9:
@@ -186,14 +186,13 @@ void multiplexerSwitch(void)
 
 void multiplexerSwitchingTask(void)
 {
-	xTaskHandle taskHandle = NULL;
 	  xTaskCreate(
 			  multiplexerSwitch,                 // function that implements the task
 	    (const char * const) "multiplexerSwitch", // a name for the task
 	    configMINIMAL_STACK_SIZE,       // depth of the task stack
 	    NULL,                           // parameters passed to the function
 	    tskIDLE_PRIORITY,               // task priority
-	    taskHandle                      // pointer to a task handle for late reference
+	    NULL                      // pointer to a task handle for late reference
 	  );
 }
 

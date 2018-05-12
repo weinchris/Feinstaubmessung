@@ -61,6 +61,7 @@
  * @param[in] pvParameters Rtos task should be defined with the type void *(as argument)
  */
 void bme280_getSensorValues(void *pvParameters);
+void bme280Task(void);
 
 /* local module global variable declarations */
 

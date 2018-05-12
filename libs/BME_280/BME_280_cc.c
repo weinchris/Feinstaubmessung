@@ -196,4 +196,28 @@ extern void bme_280_deInit(void)
     }
 }
 
+void bme280Read(void)
+{
+	for(;;)
+	{
+		vTaskDelay (5000);
+		{
+			bme280_getSensorValues(NULL);
+		}
+	}
+}
+
+void bme280Task(void)
+{
+	xTaskCreate(
+			bme280Read,                 // function that implements the task
+		    (const char * const) "bme280Read", // a name for the task
+		    configMINIMAL_STACK_SIZE,       // depth of the task stack
+		    NULL,                           // parameters passed to the function
+		    tskIDLE_PRIORITY,               // task priority
+		    NULL                      // pointer to a task handle for late reference
+		  );
+}
+
+
 /** ************************************************************************* */

@@ -102,11 +102,12 @@ void UARTrecieve(void){
 		}
 		len++;
 		if (len == 10 && checksum_ok == 1) {
-			pm10 = (float)pm10_serial/10.0;
-			pm25 = (float)pm25_serial/10.0;
+			value_pm10 = (float)pm10_serial/10.0;
+			value_pm25 = (float)pm25_serial/10.0;
 			len = 0; checksum_ok = 0; pm10_serial = 0.0; pm25_serial = 0.0; checksum_is = 0;
 			error = 0;
-			printf("PM10: %f PM25: %f\n\r", pm10, pm25);
+			printf("PM10: %f PM25: %f\n\r", value_pm10, value_pm25);
+			vTaskDelay (2000);
 		}
 
 
@@ -148,14 +149,13 @@ void UARTInit(void)
 
 void UARTTask(void)
 {
-  xTaskHandle taskHandle = NULL;
   xTaskCreate(
 	UARTrecieve,                 // function that implements the task
-    (const char * const) "reciveUART", // a name for the task
-    configMINIMAL_STACK_SIZE,       // depth of the task stack
+    (const char * const) "UARTrecieve", // a name for the task
+    (configMINIMAL_STACK_SIZE + 1),       // depth of the task stack
     NULL,                           // parameters passed to the function
     tskIDLE_PRIORITY,               // task priority
-    taskHandle                      // pointer to a task handle for late reference
+    NULL                      // pointer to a task handle for late reference
   );
 }
 
