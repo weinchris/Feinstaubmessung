@@ -47,6 +47,7 @@
 * @file
 **/
 /* module includes ********************************************************** */
+#include "libs/ADC/ADC.h"
 #include "libs/BME_280/BME_280_ch.h"
 #include "libs/BME_280/BME_280_ih.h"
 #include "libs/SDS011/SDS.h"
@@ -124,9 +125,14 @@ void appInitSystem(void * CmdProcessorHandle, uint32_t param2)
     //writeDataOnSD("write some datajdfjkfj \n\r");
     //sdcard_deintit();
 
-    printf("UART before\n\r");
-    UARTInit();
-    UARTTask();
+//    UARTInit();
+//    UARTTask();
+
+    multiplexerSwitchingInit();
+    multiplexerSwitchingTask();
+
+    scanAdcInit();
+    scanAdcTask();
 
 
 

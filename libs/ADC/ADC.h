@@ -46,13 +46,29 @@
  /* Priorities */
 
 /* local type and macro definitions */
+typedef enum
+{
+  switching, // semaphor
+  mq9,
+  mq135,
+  rain
+} Current_External_Sensor;
 
 /* local function prototype declarations */
+extern void scanAdcInit(void);
+extern void scanAdcTask(void);
+extern void multiplexerSwitchingInit(void);
+extern void multiplexerSwitchingTask(void);
 
 /* local module global variable declarations */
+double value_mq9;
+double value_mq135;
+double value_rain;
+
+
 
 /* local inline function definitions */
-extern void scanAdcInit(void);
+
 
 
 /** ************************************************************************* */

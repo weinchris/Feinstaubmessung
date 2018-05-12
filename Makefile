@@ -26,7 +26,8 @@ export BCDS_XDK_APP_SOURCE_FILES = \
 	$(BCDS_APP_SOURCE_DIR)/libs/BME_280/BME_280_cc.c \
 	$(BCDS_APP_SOURCE_DIR)/libs/Logger/Logger.c \
 	$(BCDS_APP_SOURCE_DIR)/libs/SDS011/SDS.c \
-	$(BCDS_APP_SOURCE_DIR)/libs/SDS011/BSP_UART.c 
+	$(BCDS_APP_SOURCE_DIR)/libs/SDS011/BSP_UART.c \
+	$(BCDS_APP_SOURCE_DIR)/libs/ADC/ADC.c \
 
 .PHONY: clean	debug release flash_debug_bin flash_release_bin
 
