@@ -77,8 +77,8 @@ CmdProcessor_T *AppCmdProcessorHandle; /**< Application Command Processor Handle
 
 static void HAL_UART_Events(UART_T uart, struct MCU_UART_Event_S event){}
 
-void UARTrecieve(void){
-
+void UARTrecieve(void)
+{
 	for(;;){
 		Retcode_T returnValue = RETCODE_OK;
 		returnValue = MCU_UART_Receive(uartHandle,  &receivedByte, 1UL);
@@ -109,9 +109,8 @@ void UARTrecieve(void){
 			printf("PM10: %f PM25: %f\n\r", value_pm10, value_pm25);
 			vTaskDelay (2000);
 		}
-
-
-}}
+	}
+}
 
 void UARTInit(void)
 {
